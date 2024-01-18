@@ -1,4 +1,4 @@
-defmodule Volko.Repo.Migrations.CreatePages do
+defmodule Volko.Repo.Migrations.CreatePagesTable do
   use Ecto.Migration
 
   def change do
