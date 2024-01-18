@@ -10,6 +10,8 @@ defmodule Volko.Pages.Page do
     field :description, :string
 
     has_many :posts, Volko.Pages.Post
+    many_to_many :admins, Volko.Accounts.User, join_through: "pages_admins"
+    many_to_many :members, Volko.Accounts.User, join_through: "pages_admins"
 
     timestamps()
   end

@@ -9,6 +9,7 @@ defmodule Volko.Pages.Post do
     field :title, :string
     field :body, :string
 
+    belongs_to :author, Volko.Accounts.User, foreign_key: :author_id
     belongs_to :page, Volko.Pages.Page
     has_many :comments, Volko.Pages.Comment
 

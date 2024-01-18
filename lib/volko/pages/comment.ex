@@ -7,6 +7,7 @@ defmodule Volko.Pages.Comment do
   schema "comments" do
     field :content, :string
 
+    belongs_to :author, Volko.Accounts.User, foreign_key: :author_id
     belongs_to :post, Volko.Pages.Post
   end
 
