@@ -1,0 +1,9 @@
+<div class="mx-auto max-w-sm">
+  <.simple_form :let={f} for={@changeset} method="post" action={~p"/pages/create"}>
+    <.input field={f[:name]} label="Name" />
+    <.input type="textarea" field={f[:description]} label="Description" />
+    <:actions>
+      <.button>Create</.button>
+    </:actions>
+  </.simple_form>
+</div>

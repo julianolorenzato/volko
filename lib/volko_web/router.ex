@@ -20,7 +20,14 @@ defmodule VolkoWeb.Router do
   scope "/", VolkoWeb do
     pipe_through :browser
 
+    live "/counter/:start_value", Counter
+    live "/nothing", Nothing
+
     get "/", PageController, :home
+    get "/pages/new", PageController, :new
+    get "/pages/:id", PageController, :show
+    post "/pages/create", PageController, :create
+    get "/pages/:id/new", PostController, :new
   end
 
   # Other scopes may use custom stacks.

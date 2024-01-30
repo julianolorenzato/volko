@@ -8,8 +8,8 @@ defmodule VolkoWeb.UserLoginLiveTest do
     test "renders log in page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/log_in")
 
-      assert html =~ "Log in"
-      assert html =~ "Register"
+      assert html =~ "Sign up"
+      assert html =~ "Sign in"
       assert html =~ "Forgot your password?"
     end
 
@@ -75,13 +75,13 @@ defmodule VolkoWeb.UserLoginLiveTest do
     } do
       {:ok, lv, _html} = live(conn, ~p"/users/log_in")
 
-      {:ok, conn} =
+      {:ok, _reset_password_live, reset_password_html} =
         lv
         |> element(~s|main a:fl-contains("Forgot your password?")|)
         |> render_click()
         |> follow_redirect(conn, ~p"/users/reset_password")
 
-      assert conn.resp_body =~ "Forgot your password?"
+      assert reset_password_html =~ "Forgot your password?"
     end
   end
 end

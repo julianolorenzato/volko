@@ -5,6 +5,7 @@ defmodule Volko.Accounts.User do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
+    field :nickname, :string
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
@@ -35,7 +36,7 @@ defmodule Volko.Accounts.User do
       validations on a LiveView form), this option can be set to `false`.
       Defaults to `true`.
 
-    * `:validate_email` - Validates the uniqueness of the email, in case
+    * `:validate_unique_email` - Validates the uniqueness of the email, in case
       you don't want to validate the uniqueness of the email (like when
       using this changeset for validations on a LiveView form before
       submitting the form), this option can be set to `false`.
@@ -44,8 +45,10 @@ defmodule Volko.Accounts.User do
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password])
+    # |> validate_nickname(opts)
     |> validate_email(opts)
     |> validate_password(opts)
+    |> put_change(:nickname, "anonymous" <> Integer.to_string(System.unique_integer()))
   end
 
   defp validate_email(changeset, opts) do
@@ -67,6 +70,13 @@ defmodule Volko.Accounts.User do
     |> maybe_hash_password(opts)
   end
 
+  defp validate_nickname(changeset, opts) do
+    changeset
+    |> validate_required([:nickname])
+    |> validate_length(:nickname, min: 3, max: 16)
+    |> maybe_validate_unique_nickname(opts)
+  end
+
   defp maybe_hash_password(changeset, opts) do
     hash_password? = Keyword.get(opts, :hash_password, true)
     password = get_change(changeset, :password)
@@ -84,8 +94,18 @@ defmodule Volko.Accounts.User do
     end
   end
 
+  defp maybe_validate_unique_nickname(changeset, opts) do
+    if Keyword.get(opts, :validate_unique_nickname, true) do
+      changeset
+      |> unsafe_validate_unique(:nickname, Volko.Repo)
+      |> unique_constraint(:nickname)
+    else
+      changeset
+    end
+  end
+
   defp maybe_validate_unique_email(changeset, opts) do
-    if Keyword.get(opts, :validate_email, true) do
+    if Keyword.get(opts, :validate_unique_email, true) do
       changeset
       |> unsafe_validate_unique(:email, Volko.Repo)
       |> unique_constraint(:email)

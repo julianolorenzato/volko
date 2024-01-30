@@ -10,6 +10,10 @@ defmodule Volko.Accounts do
 
   ## Database getters
 
+  def get_user_by_nickname(nickname) when is_binary(nickname) do
+    Repo.get_by(User, nickname: nickname)
+  end
+
   @doc """
   Gets a user by email.
 
@@ -90,7 +94,7 @@ defmodule Volko.Accounts do
 
   """
   def change_user_registration(%User{} = user, attrs \\ %{}) do
-    User.registration_changeset(user, attrs, hash_password: false, validate_email: false)
+    User.registration_changeset(user, attrs, hash_password: false, validate_unique_email: false)
   end
 
   ## Settings

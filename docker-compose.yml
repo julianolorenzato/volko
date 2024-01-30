@@ -1,24 +1,77 @@
 version: '3'
 
 services:
-  dev-database:
-    image: postgres
+  app:
+    container_name: volko-app
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - migrations
     ports:
-      - '5432:5432'
+      - 4000:4000
+    volumes:
+      - .:/app
+
+  database:
+    container_name: volko-db
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5400:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=volko_dev
-  # test-database:
-  #   image: postgres
-  #   ports:
-  #     - '5432:5433'
-  #   environment:
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=postgres
-  #     - POSTGRES_DB=volko_test
+
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - database
+    entrypoint: [ "mix", "ecto.migrate" ]
+    volumes:
+      - .:/app
+
+  # app-test:
+  #   container_name: volko-app-test
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #   depends_on:
+  #     - migrations-test
   #   volumes:
-  #     - dev-volume:/var/lib/postgresql/data
+  #     - .:/app
+  #   command: apt-get install -y fswatch
+  #   entrypoint: ["mix", "test"]
+
+  # CONNECT TO THIS DB, MIGRATE AND TEST OUTSIDE DOCKER
+  database-test:
+    container_name: volko-db-test
+    image: postgres
+    volumes:
+      - db-data-test:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=volko_test
+
+  # migrations-test:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #   depends_on:
+  #     - database-test
+  #   environment:
+  #     - MIX_ENV=test
+  #   entrypoint: [ "mix", "ecto.migrate" ]
+  #   volumes:
+  #     - .:/app
 
 volumes:
-  dev-volume:
+  db-data:
+  db-data-test:

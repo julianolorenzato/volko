@@ -8,8 +8,8 @@ defmodule VolkoWeb.UserRegistrationLiveTest do
     test "renders registration page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/register")
 
-      assert html =~ "Register"
-      assert html =~ "Log in"
+      assert html =~ "Create an account"
+      assert html =~ "Sign in"
     end
 
     test "redirects if already logged in", %{conn: conn} do
@@ -75,13 +75,13 @@ defmodule VolkoWeb.UserRegistrationLiveTest do
     test "redirects to login page when the Log in button is clicked", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/register")
 
-      {:ok, _login_live, login_html} =
+      {:ok, _login_lv, login_html} =
         lv
         |> element(~s|main a:fl-contains("Sign in")|)
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 
-      assert login_html =~ "Log in"
+      assert login_html =~ "Sign in"
     end
   end
 end

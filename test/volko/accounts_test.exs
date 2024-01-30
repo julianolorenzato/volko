@@ -6,6 +6,19 @@ defmodule Volko.AccountsTest do
   import Volko.AccountsFixtures
   alias Volko.Accounts.{User, UserToken}
 
+  describe "get_user_by_nickname/1" do
+    test "does not return the user if the nickname does not exist" do
+      refute Accounts.get_user_by_nickname("ausernamethatnotexists!!3242sadasa")
+    end
+
+
+    # wrong fixture
+    test "returns the user if the nickname exists" do
+      %{id: id} = user = user_fixture()
+      assert %User{id: ^id} = Accounts.get_user_by_nickname(user.nickname)
+    end
+  end
+
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
       refute Accounts.get_user_by_email("unknown@example.com")

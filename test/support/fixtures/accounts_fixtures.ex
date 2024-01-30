@@ -3,7 +3,9 @@ defmodule Volko.AccountsFixtures do
   This module defines test helpers for creating
   entities via the `Volko.Accounts` context.
   """
+  alias Volko.Repo
 
+  def unique_user_nickname, do: "nick#{System.unique_integer()}"
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
 

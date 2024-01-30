@@ -1,0 +1,17 @@
+<%= if @current_user do %>
+  <.link href={~p"/pages/new"}>
+    <.button class="w-full">New Page</.button>
+  </.link>
+  <div class="my-4 border border-white" />
+<% end %>
+
+<h1 class="text-center py-2 font-bold">Featured pages</h1>
+<div class="p-2 w-full flex flex-col gap-2">
+  <%= for page <- @pages do %>
+    <.link href={~p"/pages/#{page.id}"}>
+      <li class="w-full p-2 list-none cursor-pointer rounded-md hover:bg-black">
+        <%= page.name %>
+      </li>
+    </.link>
+  <% end %>
+</div>

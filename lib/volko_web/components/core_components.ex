@@ -15,9 +15,12 @@ defmodule VolkoWeb.CoreComponents do
   Icons are provided by [heroicons](https://heroicons.com). See `icon/1` for usage.
   """
   use Phoenix.Component
+  use VolkoWeb, :verified_routes
 
   alias Phoenix.LiveView.JS
   import VolkoWeb.Gettext
+
+  embed_templates "pieces/*"
 
   @doc """
   Renders a modal.
@@ -196,7 +199,7 @@ defmodule VolkoWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="mt-10 space-y-8">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -301,7 +304,7 @@ defmodule VolkoWeb.CoreComponents do
 
     ~H"""
     <div phx-feedback-for={@name}>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+      <label class="flex items-center gap-4 text-sm leading-6 text-text">
         <input type="hidden" name={@name} value="false" />
         <input
           type="checkbox"
@@ -389,7 +392,7 @@ defmodule VolkoWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label for={@for} class="block text-sm font-semibold leading-6 text-text">
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -422,7 +425,7 @@ defmodule VolkoWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-lg font-semibold leading-8 text-text">
           <%= render_slot(@inner_block) %>
         </h1>
         <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">

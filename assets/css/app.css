@@ -3,3 +3,7 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+
+.centralize-x {
+    @apply relative left-1/2 -translate-x-1/2;
+}
