@@ -11,8 +11,9 @@ defmodule Volko.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
-    many_to_many :pages_admin, Volko.Pages.Page, join_through: "pages_admin"
-    many_to_many :pages_member, Volko.Pages.Page, join_through: "pages_member"
+    has_many :members, Volko.Pages.Member
+    has_many :pages, through: [:members, :page]
+
     has_many :posts, Volko.Pages.Post, foreign_key: :author_id
     has_many :comments, Volko.Pages.Comment, foreign_key: :author_id
 

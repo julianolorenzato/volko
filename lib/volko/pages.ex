@@ -1,4 +1,5 @@
 defmodule Volko.Pages do
+  alias Volko.Pages.Member
   alias Volko.Repo
   alias Volko.Pages.Page
 
@@ -6,10 +7,20 @@ defmodule Volko.Pages do
     Page.changeset(page, attrs)
   end
 
-  def create_page(attrs) do
-    %Page{}
-    |> Page.changeset(attrs)
-    |> Repo.insert()
+  def create_page(attrs, current_user) do
+    member =
+      %Member{}
+      |> Member.changeset_roles(%{role: :owner})
+      |> Ecto.Changeset.put_assoc(:user, current_user)
+
+    page =
+      %Page{}
+      |> Page.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:members, [member])
+
+    IO.inspect(page, label: "pagerrrrrrrrrrrr")
+
+    Repo.insert(page)
   end
 
   def retrieve_page(id), do: Repo.get(Page, id)

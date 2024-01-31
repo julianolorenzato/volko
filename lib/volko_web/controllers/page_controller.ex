@@ -49,7 +49,9 @@ defmodule VolkoWeb.PageController do
   end
 
   def create(conn, %{"page" => page_params}) do
-    result = Pages.create_page(page_params)
+    result = Pages.create_page(page_params, conn.assigns.current_user)
+
+    IO.inspect(result, label: "AAABBBBBBBBBB")
 
     case result do
       {:ok, page} ->

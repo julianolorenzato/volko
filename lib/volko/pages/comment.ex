@@ -9,6 +9,8 @@ defmodule Volko.Pages.Comment do
 
     belongs_to :author, Volko.Accounts.User, foreign_key: :author_id
     belongs_to :post, Volko.Pages.Post
+
+    timestamps()
   end
 
   def changeset(comment, attrs) do
